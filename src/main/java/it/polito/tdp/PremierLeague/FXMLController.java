@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.PremierLeague.model.Mesi;
 import it.polito.tdp.PremierLeague.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,7 +41,7 @@ public class FXMLController {
     private TextField txtMinuti; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbMese"
-    private ComboBox<?> cmbMese; // Value injected by FXMLLoader
+    private ComboBox<Mesi> cmbMese; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbM1"
     private ComboBox<?> cmbM1; // Value injected by FXMLLoader
@@ -57,7 +59,34 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	this.txtResult.clear();
+    	Mesi mese = this.cmbMese.getValue();
+    	String s = this.txtMinuti.getText();
+    	int min =0;
     	
+    	try {
+    		min = Integer.parseInt(s);
+    	}catch(NumberFormatException nfe) {
+    		txtResult.appendText("Inserisci i minuti di gioco!");
+    		return;
+    	}
+    	
+    	
+    	if(mese==null) {
+    		txtResult.appendText("Seleziona un mese!");
+    		return;
+    	}
+    	
+    	model.creaGrafo(mese, min);
+    	
+    	txtResult.appendText("GRAFO CREATO!\n");
+    	txtResult.appendText("#VERTICI: "+this.model.vertici() + "\n");
+    	txtResult.appendText("#ARCHI: "+this.model.archi() + "\n");
+    
+    	
+    	
+    	
+    		
     }
 
     @FXML
@@ -79,6 +108,7 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	this.cmbMese.getItems().addAll(model.getMesi());
   
     }
     
